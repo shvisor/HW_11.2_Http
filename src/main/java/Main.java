@@ -1,5 +1,8 @@
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -25,9 +28,15 @@ public class Main {
 
         CloseableHttpResponse response = httpClient.execute(request);
 
-        List<NasaResponse> nasaResponses = mapper.readValue(response.getEntity().getContent(), new TypeReference<List<NasaResponse>>() {});
+        JSONPObject nasaResponses = (JSONPObject) response;
 
-        nasaResponses.forEach(System.out::println);
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        NasaResponse object = gson.fromJson(String.valueOf(nasaResponses), NasaResponse.class);
+
+        System.out.println(object);
+
+//        nasaResponses.forEach(System.out::println);
     }
 }
 
