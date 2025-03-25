@@ -28,13 +28,11 @@ public class Main {
 
         CloseableHttpResponse response = httpClient.execute(request);
 
-        JSONPObject nasaResponses = (JSONPObject) response;
+        List<NasaResponse> jsonToLists = mapper.readValue(
+                response.getEntity().getContent(), new
+                        TypeReference<List<NasaResponse>>() {});
 
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-        NasaResponse object = gson.fromJson(String.valueOf(nasaResponses), NasaResponse.class);
-
-        System.out.println(object);
+        System.out.println(jsonToLists);
 
 //        nasaResponses.forEach(System.out::println);
     }
